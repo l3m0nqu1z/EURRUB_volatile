@@ -1,4 +1,4 @@
-# EUR/RUB_least_volatile_finder
+# EUR/RUB least volatile finder
 A simple script helps find the least volatile EUR/RUB pair in March since 2015.
 
 System requirements:
