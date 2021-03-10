@@ -1,6 +1,7 @@
 #!/bin/bash
 TMP="/tmp/jq.tmp"
 [[ ! -f ./quotes.json ]] && curl -s https://yandex.ru/news/quotes/graph_2000.json > ./quotes.json
+
 loading() {
    pid=$!
    spin='-\|/'
@@ -12,6 +13,7 @@ loading() {
       sleep .1
    done
 }
+
 main() {
 jq -c '.prices[]' quotes.json | grep -oP '\d+\,\d+\.\d+' | sed 's/,/\t/' > $TMP
 grep -oP '^\d{10}' $TMP | while read OLD_DATE; do
@@ -27,8 +29,11 @@ grep Mar $TMP | grep $i | awk '{print $8}' | awk -v min=100 -v max=0 '{if ($1>ma
 VOLATILE=$(awk '{print $3}' $TMP.2 | awk -v min=100 '{if ($1<min) min=$1} END {print min}')
 grep "$VOLATILE" $TMP.2
 }
+
 cleanup() {
 rm -f $TMP*
 }
+
+#Script's working steps
 main & loading
 cleanup
