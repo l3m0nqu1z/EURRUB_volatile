@@ -1,6 +1,6 @@
 #!/bin/bash
 TMP="/tmp/jq.tmp"
-curl -s https://yandex.ru/news/quotes/graph_2000.json > ./quotes.json
+[[ ! -f ./quotes.json ]] && curl -s https://yandex.ru/news/quotes/graph_2000.json > ./quotes.json
 loading() {
    pid=$!
    spin='-\|/'
