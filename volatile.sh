@@ -15,7 +15,7 @@ loading() {
 main() {
 jq -c '.prices[]' quotes.json | grep -oP '\d+\,\d+\.\d+' | sed 's/,/\t/' > $TMP
 grep -oP '^\d{10}' $TMP | while read OLD_DATE; do
-NEW_DATE=$(date --date="@$OLD_DATE")
+NEW_DATE=$(date +"%a %d %b %Y %T %p %:::z " --date="@$OLD_DATE")
 OLD_DATE+=000
 sed -i "s/$OLD_DATE/$NEW_DATE/g" $TMP
 done
