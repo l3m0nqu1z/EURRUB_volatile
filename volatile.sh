@@ -27,5 +27,8 @@ grep Mar $TMP | grep $i | awk '{print $8}' | awk -v min=100 -v max=0 '{if ($1>ma
 VOLATILE=$(awk '{print $3}' $TMP.2 | awk -v min=100 '{if ($1<min) min=$1} END {print min}')
 grep "$VOLATILE" $TMP.2
 }
-main & loading
+clenup() {
 rm -f $TMP*
+}
+main & loading
+cleanup
