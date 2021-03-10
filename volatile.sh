@@ -17,16 +17,16 @@ loading() {
 main() {
 jq -c '.prices[]' quotes.json | grep -oP '\d+\,\d+\.\d+' | sed 's/,/\t/' > $TMP
 grep -oP '^\d{10}' $TMP | while read OLD_DATE; do
-NEW_DATE=$(date +"%a %d %b %Y %T %p %:::z " --date="@$OLD_DATE")
+NEW_DATE=$(date +"%a %d %B %Y %T %p %:::z " --date="@$OLD_DATE")
 OLD_DATE+=000
 sed -i "s/$OLD_DATE/$NEW_DATE/g" $TMP
 done
 for (( i=2015; i<=2021; i++ ))
 {
-echo -n -e "\tMarch $i\t"
-grep Mar $TMP | grep $i | awk '{print $8}' | awk -v min=100 -v max=0 '{if ($1>max) max=$1; if ($1<min) min=$1} END {print max-min}'
+echo -n -e "\t$1 $i\t"
+grep $1 $TMP | grep $i | awk '{print $8}' | awk -v min=$1 -v max=0 '{if ($1>max) max=$1; if ($1<min) min=$1} END {print max-min}'
 } > $TMP.2
-VOLATILE=$(awk '{print $3}' $TMP.2 | awk -v min=100 '{if ($1<min) min=$1} END {print min}')
+VOLATILE=$(awk '{print $3}' $TMP.2 | awk -v min=$1 '{if ($1<min && $1 != 0) min=$1} END {print min}')
 grep "$VOLATILE" $TMP.2
 }
 
@@ -35,5 +35,5 @@ rm -f $TMP*
 }
 
 #Script's working steps
-main & loading
+main $1 & loading
 cleanup
